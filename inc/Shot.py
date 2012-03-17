@@ -5,13 +5,16 @@ import multiprocessing as mproc
 import subprocess
 
 class Shot():
-    def __init__(self, shotName, dbname="shots.sqlite"):
+    def __init__(self, shotName, dbname):
 
         # Set up some member variables:
         self.shotName = shotName
-        self.dbname = dbname
+        self.dbFile = dbname
         ##
         date = str(datetime.datetime.now())
+        # Create the table, if it doesn't exist:
+        self.CreateTable()
+        #####
         self.OpenDB()
         self.cur.execute("INSERT INTO Shots (name, finished, date, \
             user, progress) VALUES (?,?,?,?,?)", \
@@ -32,11 +35,14 @@ class Shot():
     ##### Private Member Methods ######
 
     def _callMaya(self):
+        self.UpdateLog("I just got sent, and I work!") # DEBUG
+        """
         try:
             out = subprocess.check_call("/grp5/anim-rgs/usr/autodesk/maya/bin/mayapy python/mayastart.py %s %s"%(self.shotName, self.rowid), shell=True)
         except subprocess.CalledProcessError:
             self.UpdateLog("Maya has crashed. SURPRISE!! Sorry.")
             print "\n\n\n\n\nCRAAAASHH!!!\n\n\n\n\n"
+        """
 
    ############
 
@@ -45,8 +51,20 @@ class Shot():
 ########################################
 
     def OpenDB(self):
-        self.conn = sqlite3.connect(self.dbname)
+        self.conn = sqlite3.connect(self.dbFile)
         self.cur = self.conn.cursor()
+
+    def CreateTable(self):
+        self.OpenDB()
+        self.cur.execute('''CREATE TABLE IF NOT EXISTS Shots (\
+        name TEXT,\
+        log TEXT, \
+        finished TEXT, \
+        date TEXT, \
+        user TEXT, \
+        progress TEXT \
+        )''')
+        self.CommitAndCloseDB()
 
     def UpdateLog(self, message):
         print message

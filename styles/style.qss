@@ -7,30 +7,36 @@
 	font-weight: bold;
 	text-transform: uppercase;
 }
+#stackedWidget QPushButton::pressed {
+	border-image: url(styles/images/button_pressed.png) 14px;
+}
 
-QLineEdit, QTextEdit{
+QLineEdit, QTextEdit, QListWidget{
 	border-width: 5px;
 	border-image: url(styles/images/field.png) 5px;
 	padding: 4px;
-	color: white;	
+	color: black;	
 }
 
 #Form {
 	background: #2B2B2B;
-	color: white;
 }
 #stackedWidget {
 	background: white;
 	color: black;
 }
 
-#tabBar QPushButton {
-	min-height: 60px;
-	min-width: 60px;
-	margin: 0;
-	padding: 0px;
-	border-width: 10%;
-	border-image: url(styles/images/indicator.png) 10%;
+#tabBar QCheckBox::checked {
+	width: 60px;
+	height: 60px;
+	border: none;
+	border-image: url(styles/images/indicator.png) 0 0 0 50px;
+}
+#tabBar QCheckBox::indicator {
+	border: none;
+	width: 60px;
+	height: 60px;
+	background: transparent;
 }
 
 #but_tab_convert {
@@ -38,4 +44,19 @@ QLineEdit, QTextEdit{
 }
 #but_tab_history {
 	background: url(styles/images/history_icon.png);
+}
+
+QProgressBar::chunk {
+	background: url(styles/images/progbar.png);
+	border-radius: 3px;
+}
+QProgressBar {
+	background: #323232;
+	color: white;
+	font-weight: bold;
+	text-transform: uppercase;
+	border-radius: 5px;
+	height: 50px;
+	border: 3px solid #323232;
+	text-align: center;
 }
