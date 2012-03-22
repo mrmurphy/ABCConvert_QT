@@ -3,13 +3,13 @@ import os
 import sqlite3
 
 class Converter():
-    def __init__(self, shotName, rowid, dbname="shots.sqlite"):
+    def __init__(self, SceneName, rowid, dbname="Scenes.sqlite"):
 
         # Set up some member variables:
-        self.shotName = shotName
+        self.SceneName = SceneName
         self.dbname = dbname
-        self.dir = os.path.dirname(self.shotName)
-        self.fileTitle = os.path.basename(self.shotName)[:-3]
+        self.dir = os.path.dirname(self.SceneName)
+        self.fileTitle = os.path.basename(self.SceneName)[:-3]
         self.cacheDir = os.path.join(self.dir, "cache")
         self.abcLoc = os.path.join(self.cacheDir, self.fileTitle + ".abc")
         self.outFile = os.path.join(self.dir, self.fileTitle + "_cache" + ".mb")
@@ -18,21 +18,21 @@ class Converter():
             os.mkdir(self.cacheDir)
         # This is just a messy patch, to preserve the naming convention
         # in estefan.
-        if ('estefan' in shotName and 'Animation' in self.fileTitle):
+        if ('estefan' in SceneName and 'Animation' in self.fileTitle):
             temp = self.fileTitle.replace("Animation", "Cache")
-            self.outFile = shotName.replace(self.fileTitle, temp);
+            self.outFile = SceneName.replace(self.fileTitle, temp);
 
     ################
     ###### Public Methods ######
     def run(self):
-        self._processShot()
+        self._processScene()
     ######
 
 
     ############
     ##### Private Member Methods ######
 
-    def _processShot(self):
+    def _processScene(self):
         # Set RMS Debug level
         os.environ['RMSDEBUG'] = '1'
         self.UpdateLog("Importing plugins...")
@@ -42,8 +42,8 @@ class Converter():
         pm.loadPlugin("AbcImport")
 
         # Loading the file.
-        self.UpdateLog("Maya now opening file: \n" + self.shotName)
-        pm.openFile(self.shotName, force=1)
+        self.UpdateLog("Maya now opening file: \n" + self.SceneName)
+        pm.openFile(self.SceneName, force=1)
         self.UpdateProgress(10);
 
         # Import all references.
@@ -57,10 +57,10 @@ class Converter():
         # Get the start frame and end frame
         startFrame = pm.playbackOptions(q=1, minTime=True) 
         startFrame -= 5 # Adjust to allow for preroll
-        self.UpdateLog("First frame of shot is: %s"%(startFrame))
+        self.UpdateLog("First frame of Scene is: %s"%(startFrame))
         endFrame = pm.SCENE.defaultRenderGlobals.endFrame.get()
         endFrame = pm.playbackOptions(q=1, maxTime=True) 
-        self.UpdateLog("Last frame of shot is: %s"%(endFrame))
+        self.UpdateLog("Last frame of Scene is: %s"%(endFrame))
 
         # Alembic export it
         self._exportABC(abcExportObjs, startFrame, endFrame, self.abcLoc)
@@ -224,7 +224,7 @@ class Converter():
 
     def UpdateFinished(self, status):
         self.OpenDB()
-        self.cur.execute("UPDATE Shots SET finished = ? where rowid = ?",
+        self.cur.execute("UPDATE Scenes SET finished = ? where rowid = ?",
                 (status, self.rowid))
         self.CommitAndCloseDB()
 
@@ -239,24 +239,24 @@ class Converter():
     def UpdateLog(self, message):
         print message
         self.OpenDB()
-        self.cur.execute("SELECT log FROM Shots WHERE rowid=?",
+        self.cur.execute("SELECT log FROM Scenes WHERE rowid=?",
                 (self.rowid,))
         orig = str(self.cur.fetchone()[0])
         if (orig != "None"):
             message = orig + "<br>" + message
-        self.cur.execute("UPDATE Shots SET log = ? where rowid = ?",
+        self.cur.execute("UPDATE Scenes SET log = ? where rowid = ?",
                 (message, self.rowid))
         self.CommitAndCloseDB()
     
     def UpdateProgress(self, prog):
         self.OpenDB()
-        self.cur.execute("UPDATE Shots SET progress = ? WHERE rowid=?",
+        self.cur.execute("UPDATE Scenes SET progress = ? WHERE rowid=?",
                 (prog, self.rowid))
         self.CommitAndCloseDB();
 
     def SetName(self, name):
         self.OpenDB()
-        self.cur.execute("UPDATE Shots SET name = ? where rowid = ?",
+        self.cur.execute("UPDATE Scenes SET name = ? where rowid = ?",
                 (name, self.rowid))
         self.CommitAndCloseDB()
 

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>602</width>
-    <height>479</height>
+    <width>850</width>
+    <height>500</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -251,7 +251,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QListWidget" name="list_scenes"/>
+        <widget class="QTableView" name="list_scenes"/>
        </item>
        <item>
         <widget class="QFrame" name="frame_3">
@@ -345,7 +345,7 @@
            </layout>
           </item>
           <item>
-           <widget class="QTextEdit" name="te_shotLog"/>
+           <widget class="QTextEdit" name="te_SceneLog"/>
           </item>
          </layout>
         </widget>

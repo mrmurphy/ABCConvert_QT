@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'forms/form.ui'
 #
-# Created: Fri Mar 16 16:35:00 2012
+# Created: Wed Mar 21 09:17:48 2012
 #      by: pyside-uic 0.2.13 running on PySide 1.1.0
 #
 # WARNING! All changes made in this file will be lost!
@@ -12,7 +12,7 @@ from PySide import QtCore, QtGui
 class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
-        Form.resize(602, 479)
+        Form.resize(850, 500)
         self.horizontalLayout_2 = QtGui.QHBoxLayout(Form)
         self.horizontalLayout_2.setSpacing(0)
         self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
@@ -121,7 +121,7 @@ class Ui_Form(object):
         self.label_8 = QtGui.QLabel(self.page_history)
         self.label_8.setObjectName("label_8")
         self.verticalLayout_5.addWidget(self.label_8)
-        self.list_scenes = QtGui.QListWidget(self.page_history)
+        self.list_scenes = QtGui.QTableView(self.page_history)
         self.list_scenes.setObjectName("list_scenes")
         self.verticalLayout_5.addWidget(self.list_scenes)
         self.frame_3 = QtGui.QFrame(self.page_history)
@@ -159,9 +159,9 @@ class Ui_Form(object):
         self.label_9.setObjectName("label_9")
         self.gridLayout_2.addWidget(self.label_9, 2, 0, 1, 1)
         self.verticalLayout_6.addLayout(self.gridLayout_2)
-        self.te_shotLog = QtGui.QTextEdit(self.frame_3)
-        self.te_shotLog.setObjectName("te_shotLog")
-        self.verticalLayout_6.addWidget(self.te_shotLog)
+        self.te_SceneLog = QtGui.QTextEdit(self.frame_3)
+        self.te_SceneLog.setObjectName("te_SceneLog")
+        self.verticalLayout_6.addWidget(self.te_SceneLog)
         self.verticalLayout_5.addWidget(self.frame_3)
         self.stackedWidget.addWidget(self.page_history)
         self.horizontalLayout_2.addWidget(self.stackedWidget)

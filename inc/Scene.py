@@ -4,11 +4,11 @@ import sqlite3
 import multiprocessing as mproc
 import subprocess
 
-class Shot():
-    def __init__(self, shotName, dbname):
+class Scene():
+    def __init__(self, SceneName, dbname):
 
         # Set up some member variables:
-        self.shotName = shotName
+        self.SceneName = SceneName
         self.dbFile = dbname
         ##
         date = str(datetime.datetime.now())
@@ -16,9 +16,9 @@ class Shot():
         self.CreateTable()
         #####
         self.OpenDB()
-        self.cur.execute("INSERT INTO Shots (name, finished, date, \
+        self.cur.execute("INSERT INTO Scenes (name, finished, date, \
             user, progress) VALUES (?,?,?,?,?)", \
-            (shotName, 'False', date, 'default', '0'))
+            (SceneName, 'False', date, 'default', '0'))
         self.rowid = str(self.cur.lastrowid)
         self.conn.commit()
         self.CommitAndCloseDB()
@@ -36,38 +36,40 @@ class Shot():
 
     def _callMaya(self):
         self.UpdateLog("I just got sent, and I work!") # DEBUG
-        time.sleep(1)
-        self.UpdateLog("working...") # DEBUG
-        self.UpdateProgress("10")
-        time.sleep(1)
-        self.UpdateLog("working...") # DEBUG
-        self.UpdateProgress("20")
-        time.sleep(1)
-        self.UpdateLog("working...") # DEBUG
-        self.UpdateProgress("30")
-        time.sleep(1)
-        self.UpdateLog("working...") # DEBUG
-        self.UpdateProgress("40")
-        time.sleep(1)
-        self.UpdateLog("working...") # DEBUG
-        self.UpdateProgress("50")
-        time.sleep(1)
-        self.UpdateLog("working...") # DEBUG
-        self.UpdateProgress("60")
-        time.sleep(1)
-        self.UpdateLog("working...") # DEBUG
-        self.UpdateProgress("70")
-        time.sleep(1)
-        self.UpdateLog("working...") # DEBUG
-        self.UpdateProgress("80")
-        time.sleep(1)
-        self.UpdateLog("working...") # DEBUG
-        self.UpdateProgress("90")
-        time.sleep(1)
-        self.UpdateProgress("100")
+        time.sleep(1) # DEBUG
+        self.UpdateLog("working") # DEBUG
+        self.UpdateProgress(10)
+        time.sleep(1) # DEBUG
+        self.UpdateLog("working") # DEBUG
+        self.UpdateProgress(20)
+        time.sleep(1) # DEBUG
+        self.UpdateLog("working") # DEBUG
+        self.UpdateProgress(30)
+        time.sleep(1) # DEBUG
+        self.UpdateLog("working") # DEBUG
+        self.UpdateProgress(40)
+        time.sleep(1) # DEBUG
+        self.UpdateLog("working") # DEBUG
+        self.UpdateProgress(50)
+        time.sleep(1) # DEBUG
+        self.UpdateLog("working") # DEBUG
+        self.UpdateProgress(60)
+        time.sleep(1) # DEBUG
+        self.UpdateLog("working") # DEBUG
+        self.UpdateProgress(70)
+        time.sleep(1) # DEBUG
+        self.UpdateLog("working") # DEBUG
+        self.UpdateProgress(80)
+        time.sleep(1) # DEBUG
+        self.UpdateLog("working") # DEBUG
+        self.UpdateProgress(90)
+        time.sleep(1) # DEBUG
+        self.UpdateLog("I just waited ten seconds, and I finished.") # DEBUG
+        self.UpdateProgress(100)
+        self.UpdateFinished("True")
         """
         try:
-            out = subprocess.check_call("/grp5/anim-rgs/usr/autodesk/maya/bin/mayapy python/mayastart.py %s %s"%(self.shotName, self.rowid), shell=True)
+            out = subprocess.check_call("/grp5/anim-rgs/usr/autodesk/maya/bin/mayapy python/mayastart.py %s %s"%(self.SceneName, self.rowid), shell=True)
         except subprocess.CalledProcessError:
             self.UpdateLog("Maya has crashed. SURPRISE!! Sorry.")
             print "\n\n\n\n\nCRAAAASHH!!!\n\n\n\n\n"
@@ -83,9 +85,10 @@ class Shot():
         self.conn = sqlite3.connect(self.dbFile)
         self.cur = self.conn.cursor()
 
+
     def CreateTable(self):
         self.OpenDB()
-        self.cur.execute('''CREATE TABLE IF NOT EXISTS Shots (\
+        self.cur.execute('''CREATE TABLE IF NOT EXISTS Scenes (\
         name TEXT,\
         log TEXT, \
         finished TEXT, \
@@ -98,13 +101,19 @@ class Shot():
     def UpdateLog(self, message):
         print message
         self.OpenDB()
-        self.cur.execute("SELECT log FROM Shots WHERE rowid=?",
+        self.cur.execute("SELECT log FROM Scenes WHERE rowid=?",
                 (self.rowid,))
         orig = str(self.cur.fetchone()[0])
         if (orig != "None"):
             message = orig + "<br>" + message
-        self.cur.execute("UPDATE Shots SET log = ? where rowid = ?",
+        self.cur.execute("UPDATE Scenes SET log = ? where rowid = ?",
                 (message, self.rowid))
+        self.CommitAndCloseDB()
+
+    def UpdateFinished(self, status):
+        self.OpenDB()
+        self.cur.execute("UPDATE Scenes SET finished = ? where rowid = ?",
+                (status, self.rowid))
         self.CommitAndCloseDB()
 
     def UpdateProgress(self, prog):
@@ -122,7 +131,15 @@ class Shot():
 
     def GetFinished(self):
         self.OpenDB()
-        self.cur.execute("SELECT finished FROM Shots WHERE rowid=?",
+        self.cur.execute("SELECT finished FROM Scenes WHERE rowid=?",
+                (self.rowid,))
+        retstr = str(self.cur.fetchone()[0])
+        self.CommitAndCloseDB()
+        return retstr
+
+    def GetProgress(self):
+        self.OpenDB()
+        self.cur.execute("SELECT progress FROM Scenes WHERE rowid=?",
                 (self.rowid,))
         retstr = str(self.cur.fetchone()[0])
         self.CommitAndCloseDB()
@@ -130,7 +147,7 @@ class Shot():
 
     def GetLog(self):
         self.OpenDB()
-        self.cur.execute("SELECT log FROM Shots WHERE rowid=?",
+        self.cur.execute("SELECT log FROM Scenes WHERE rowid=?",
                 (self.rowid,))
         retstr = str(self.cur.fetchone()[0])
         self.CommitAndCloseDB()
