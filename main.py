@@ -26,7 +26,11 @@ class MainForm(QtGui.QWidget):
 		self.ui.list_scenes.hideColumn(1)
 		self.ui.list_scenes.hideColumn(4)
 		self.ui.list_scenes.resizeColumnsToContents()
-		#self.ui.list_scenes.sortByColumn()
+		self.ui.list_scenes.sortByColumn(3, QtCore.Qt.DescendingOrder)
+		self.ui.list_scenes.setGridStyle(QtCore.Qt.NoPen)
+		self.ui.list_scenes.verticalHeader().hide()
+		self.ui.list_scenes.horizontalHeader().stretchLastSection()
+		self.ui.list_scenes.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
 
 		# Set up some slots and signals.
 		self.ui.but_go.clicked.connect(self.startNewConversion)
