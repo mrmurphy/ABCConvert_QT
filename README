@@ -1,0 +1,25 @@
+#### ABC Convert is a pipeline tool written for the BYU Center for Animation
+#### It is currently unfinished, and will probably remain that way due to the
+#### fact that the project for which it was created is finished.
+#### Programmer: Murphy Randle, 2012 : Murphyspublic@gmail.com
+
+This tool requires Autodesk Maya 2012 to be installed and located in $PATH.
+Also, the ABCImport and ABCExport plugins must be compiled and installed
+into Maya.
+
+This plugin can be found here:
+http://www.alembic.io/
+
+This tool also requires Python 2.6
+
+
+######### Some notes ###########
+I used QT & Pyside for the interface, and in order to not block the UI while running 
+the heavy conversion process, the controller spawns a process in a new thread.
+
+The conversion process writes all of its information to a local Sqlite3 database, and
+the UI checks that database regularly for updated information. When no scenes are being
+converted, the UI stops checking the DB.
+
+If the user deletes the DB file, a new DB file with all of the correct fields will be
+set up automatically.
