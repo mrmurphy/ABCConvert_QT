@@ -1,6 +1,6 @@
+#### NOTE: This tool is no longer under active development. ####
 #### ABC Convert is a pipeline tool written for the BYU Center for Animation
-#### It is currently unfinished, and will probably remain that way due to the
-#### fact that the project for which it was created is finished.
+#### It is currently unfinished.
 #### Programmer: Murphy Randle, 2012 : Murphyspublic@gmail.com
 
 This tool requires Autodesk Maya 2012 to be installed and located in $PATH.
@@ -23,3 +23,10 @@ converted, the UI stops checking the DB.
 
 If the user deletes the DB file, a new DB file with all of the correct fields will be
 set up automatically.
+
+
+####### TODO ########
+
+ -> Currently, the database is accessed in two ways, through QT's built-in methods, 
+	and through the python Sqlite3 library. Unify this in the controller so that only
+	one DB access method is used.
