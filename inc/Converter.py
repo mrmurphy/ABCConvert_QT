@@ -3,11 +3,11 @@ import os
 import sqlite3
 
 class Converter():
-    def __init__(self, SceneName, rowid, dbname="Scenes.sqlite"):
+    def __init__(self, SceneName, rowid, DbFile):
 
         # Set up some member variables:
         self.SceneName = SceneName
-        self.dbname = dbname
+        self.DbFile = DbFile
         self.dir = os.path.dirname(self.SceneName)
         self.fileTitle = os.path.basename(self.SceneName)[:-3]
         self.cacheDir = os.path.join(self.dir, "cache")
@@ -229,7 +229,7 @@ class Converter():
         self.CommitAndCloseDB()
 
     def OpenDB(self):
-        self.conn = sqlite3.connect(self.dbname)
+        self.conn = sqlite3.connect(self.DbFile)
         self.cur = self.conn.cursor()
 
     def CommitAndCloseDB(self):

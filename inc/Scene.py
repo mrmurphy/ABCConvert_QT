@@ -3,13 +3,15 @@ import datetime
 import sqlite3
 import multiprocessing as mproc
 import subprocess
+import sys
+import os
 
 class Scene():
-    def __init__(self, SceneName, dbname):
+    def __init__(self, SceneName, DbFile):
 
         # Set up some member variables:
         self.SceneName = SceneName
-        self.dbFile = dbname
+        self.DbFile = DbFile
         ##
         date = str(datetime.datetime.now())
         # Create the table, if it doesn't exist:
@@ -35,6 +37,7 @@ class Scene():
     ##### Private Member Methods ######
 
     def _callMaya(self):
+        """
         self.UpdateLog("I just got sent, and I work!") # DEBUG
         time.sleep(1) # DEBUG
         self.UpdateLog("working") # DEBUG
@@ -69,11 +72,14 @@ class Scene():
         self.UpdateFinished("True")
         """
         try:
-            out = subprocess.check_call("/grp5/anim-rgs/usr/autodesk/maya/bin/mayapy python/mayastart.py %s %s"%(self.SceneName, self.rowid), shell=True)
+            curdir = sys.path[0]
+            mayastart = os.path.join(curdir, "inc/mayastart.py")
+            mayapy = "/Applications/Autodesk/maya2012/Maya.app/Contents/bin/mayapy"
+            out = subprocess.check_call("%s %s %s %s %s"\
+                %(mayapy, mayastart, self.SceneName, self.rowid, self.DbFile), shell=True)
         except subprocess.CalledProcessError:
             self.UpdateLog("Maya has crashed. SURPRISE!! Sorry.")
             print "\n\n\n\n\nCRAAAASHH!!!\n\n\n\n\n"
-        """
 
    ############
 
@@ -82,7 +88,7 @@ class Scene():
 ########################################
 
     def OpenDB(self):
-        self.conn = sqlite3.connect(self.dbFile)
+        self.conn = sqlite3.connect(self.DbFile)
         self.cur = self.conn.cursor()
 
 
