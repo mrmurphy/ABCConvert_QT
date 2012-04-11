@@ -1,10 +1,10 @@
-import time
 import datetime
 import sqlite3
 import multiprocessing as mproc
 import subprocess
 import sys
 import os
+
 
 class Scene():
     def __init__(self, SceneName, DbFile):
@@ -32,10 +32,8 @@ class Scene():
         p.start()
     ######
 
-
     ############
     ##### Private Member Methods ######
-
     def _callMaya(self):
         """
         self.UpdateLog("I just got sent, and I work!") # DEBUG
@@ -74,9 +72,11 @@ class Scene():
         try:
             curdir = sys.path[0]
             mayastart = os.path.join(curdir, "inc/mayastart.py")
-            mayapy = "/Applications/Autodesk/maya2012/Maya.app/Contents/bin/mayapy"
-            out = subprocess.check_call("%s %s %s %s %s"\
-                %(mayapy, mayastart, self.SceneName, self.rowid, self.DbFile), shell=True)
+            mayapy = "/Applications/Autodesk/maya2012/" + \
+                "Maya.app/Contents/bin/mayapy"
+            subprocess.check_call("%s %s %s %s %s"\
+                % (mayapy, mayastart, self.SceneName, \
+                    self.rowid, self.DbFile), shell=True)
         except subprocess.CalledProcessError:
             self.UpdateLog("Maya has crashed. SURPRISE!! Sorry.")
             print "\n\n\n\n\nCRAAAASHH!!!\n\n\n\n\n"
@@ -90,7 +90,6 @@ class Scene():
     def OpenDB(self):
         self.conn = sqlite3.connect(self.DbFile)
         self.cur = self.conn.cursor()
-
 
     def CreateTable(self):
         self.OpenDB()
@@ -126,7 +125,7 @@ class Scene():
         self.OpenDB()
         self.cur.execute("UPDATE Scenes SET progress = ? WHERE rowid=?",
                 (prog, self.rowid))
-        self.CommitAndCloseDB();
+        self.CommitAndCloseDB()
 
     def CommitAndCloseDB(self):
         self.conn.commit()
