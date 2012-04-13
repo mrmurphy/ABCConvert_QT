@@ -81,8 +81,11 @@ class Converter():
         self.UpdateProgress(70)
 
         # Import ABC Cache
-        self.UpdateLog("Importing ABC cache..." + self.abcLoc)
-        pm.mel.eval('AbcImport -ftr -d "%s"' % (self.abcLoc))
+        try:
+            self.UpdateLog("Importing ABC cache..." + self.abcLoc)
+            pm.mel.eval('AbcImport -ftr -d "%s"' % (self.abcLoc))
+        except:
+            self.UpdateLog("I had a problem bringing the alembic in.")
         self.UpdateProgress(80)
 
         # Re-apply the shaders
@@ -97,6 +100,8 @@ class Converter():
         os.system("chmod 755 " + self.outFile)
         self.UpdateLog("File saved.")
         self.UpdateProgress(100)
+        self.UpdateLog("We're good. I opened it")
+        self.UpdateFinished("True")
 
     def _importAllReferences(self):
         self.UpdateLog("Importing all references...")
@@ -126,10 +131,12 @@ class Converter():
                 '-pfc ABCPyCallback(#FRAME#) ' + \
                 '-frameRange %s %s %s -file %s"' % (startFrame, endFrame, \
                                                  rootsStr, ABC_LOC)
-        #self.UpdateLog(abcCommand)
-        #print abcCommand
-        self.UpdateLog("Writing ABC data to file: " + ABC_LOC)
-        pm.mel.eval(abcCommand)
+        try:
+            self.UpdateLog("Writing ABC data to file: " + ABC_LOC)
+            pm.mel.eval(abcCommand)
+        except:
+            self.UpdateLog("Maya thinks it had an \
+                error writing out the abc command.")
 
     def _storeShaders(self):
         print "Storing shaders"

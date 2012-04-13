@@ -2,8 +2,9 @@
 	border-width: 14px;
 	border-image: url(styles/images/button.png) 14px;
 	min-height: 30px;
-	padding: -15px 0px;
-	color: #535353;
+	padding: -10px 0px;
+	margin: 0px 3px;
+	color: #EAEAEA;
 	font-weight: bold;
 	text-transform: uppercase;
 }

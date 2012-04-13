@@ -35,43 +35,13 @@ class Scene():
     ############
     ##### Private Member Methods ######
     def _callMaya(self):
-        """
-        self.UpdateLog("I just got sent, and I work!") # DEBUG
-        time.sleep(1) # DEBUG
-        self.UpdateLog("working") # DEBUG
-        self.UpdateProgress(10)
-        time.sleep(1) # DEBUG
-        self.UpdateLog("working") # DEBUG
-        self.UpdateProgress(20)
-        time.sleep(1) # DEBUG
-        self.UpdateLog("working") # DEBUG
-        self.UpdateProgress(30)
-        time.sleep(1) # DEBUG
-        self.UpdateLog("working") # DEBUG
-        self.UpdateProgress(40)
-        time.sleep(1) # DEBUG
-        self.UpdateLog("working") # DEBUG
-        self.UpdateProgress(50)
-        time.sleep(1) # DEBUG
-        self.UpdateLog("working") # DEBUG
-        self.UpdateProgress(60)
-        time.sleep(1) # DEBUG
-        self.UpdateLog("working") # DEBUG
-        self.UpdateProgress(70)
-        time.sleep(1) # DEBUG
-        self.UpdateLog("working") # DEBUG
-        self.UpdateProgress(80)
-        time.sleep(1) # DEBUG
-        self.UpdateLog("working") # DEBUG
-        self.UpdateProgress(90)
-        time.sleep(1) # DEBUG
-        self.UpdateLog("I just waited ten seconds, and I finished.") # DEBUG
-        self.UpdateProgress(100)
-        self.UpdateFinished("True")
-        """
+        ''' Launches a process, passing the mayastart.py script
+            to mayapy.'''
         try:
+            self.UpdateLog("Attempting to start Maya...")
             curdir = sys.path[0]
             mayastart = os.path.join(curdir, "inc/mayastart.py")
+            #TODO Don't hard code the following path:
             mayapy = "/Applications/Autodesk/maya2012/" + \
                 "Maya.app/Contents/bin/mayapy"
             subprocess.check_call("%s %s %s %s %s"\
